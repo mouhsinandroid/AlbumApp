@@ -45,8 +45,8 @@ class AlbumItemDaoTest {
     @Test
     fun insertAlbumItem() = runBlocking {
         val albumItem = AlbumItem(
-            albumId = "10",
-            id = "2",
+            albumId = 10,
+            id = 2,
             title = "Album 2",
             url = "www.album.com",
             thumbnailUrl = "www.ds.com"

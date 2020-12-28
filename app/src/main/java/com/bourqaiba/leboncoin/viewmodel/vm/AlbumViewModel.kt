@@ -21,6 +21,10 @@ class AlbumViewModel(
 
     val album : MutableLiveData<Resource<Album>> = MutableLiveData()
 
+    init {
+        getAlbum()
+    }
+
     fun getAlbum() = viewModelScope.launch {
         album.postValue(Resource.loading(null))
         if (networkHelper.isNetworkConnected()) {
@@ -33,15 +37,6 @@ class AlbumViewModel(
     }
 
     private fun handleAlbum(response: Response<Album>): Resource<Album> {
-        if(response.isSuccessful) {
-            response.body()?.let {result ->
-                return Resource.success(result)
-            }
-        }
-        return Resource.error(response.message(), null)
-    }
-
-    private fun handleAlbumList(response: Response<Album>): Resource<Album> {
         if(response.isSuccessful) {
             response.body()?.let {result ->
                 return Resource.success(result)

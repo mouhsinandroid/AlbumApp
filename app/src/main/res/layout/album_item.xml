@@ -37,20 +37,27 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:background="@drawable/ic_launcher_background"
+                    android:imageUrl="@{albumItem.url}"
+                    android:background="@drawable/item_bg"
                     android:contentDescription="@string/image_album"/>
 
                 <TextView
                     android:id="@+id/albumTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    tools:text="@{albumItem.title}"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_10sdp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:fontFamily="@font/roboto_bold"
+                    android:maxLines="4"
+                    android:text="@{albumItem.title}"
+                    android:textColor="@color/colorGrey"
+                    android:textSize="18sp"
+                    android:textAllCaps="true"
                     app:layout_constraintBottom_toBottomOf="@+id/albumThumbnail"
                     app:layout_constraintEnd_toEndOf="@+id/albumThumbnail"
                     app:layout_constraintStart_toStartOf="@+id/albumThumbnail"
-                    app:layout_constraintTop_toTopOf="@+id/albumThumbnail" />
+                    app:layout_constraintTop_toTopOf="@+id/albumThumbnail"
+                    tools:text="MOUHSIN BOUR QAIBA" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -71,6 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     tools:text="TextView"
+                    photos="@{albumItem.id}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

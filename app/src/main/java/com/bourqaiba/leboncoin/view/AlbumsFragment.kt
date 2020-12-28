@@ -1,21 +1,18 @@
 package com.bourqaiba.leboncoin.view
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bourqaiba.leboncoin.R
-import com.bourqaiba.leboncoin.data.database.AlbumDatabase
-import com.bourqaiba.leboncoin.data.repository.AlbumRepository
+import com.bourqaiba.leboncoin.data.database.entity.Album
 import com.bourqaiba.leboncoin.databinding.FragmentAlbumsBinding
+import com.bourqaiba.leboncoin.util.Resource
 import com.bourqaiba.leboncoin.util.Status
 import com.bourqaiba.leboncoin.view.adapter.AlbumAdapter
-import com.bourqaiba.leboncoin.viewmodel.factory.AlbumViewModelFactory
 import com.bourqaiba.leboncoin.viewmodel.vm.AlbumViewModel
 import kotlinx.android.synthetic.main.fragment_albums.*
 import timber.log.Timber
@@ -29,38 +26,31 @@ class AlbumsFragment : Fragment() {
 
     private lateinit var albumAdapter: AlbumAdapter
 
+    private val albumListDataObserver = Observer<Resource<Album>>{ list ->
+        list?.let {
+            albumAdapter.differ.submitList(it.data)
+        }
+
+    }
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        dataBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_albums,
-            container,
-            false)
-        return dataBinding.root
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_albums, container, false)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel(requireActivity().applicationContext)
-
+        albumViewModel = (activity as HomeActivity).viewModel
+        albumViewModel.album.observe(viewLifecycleOwner, albumListDataObserver)
         setupUI()
     }
 
 
-
-    private fun initViewModel(context: Context) {
-        val repository = AlbumRepository(AlbumDatabase(context))
-        val viewModelProviderFactory = AlbumViewModelFactory(requireActivity().application, repository)
-        albumViewModel = ViewModelProvider(this, viewModelProviderFactory).get(
-            AlbumViewModel::class.java)
-
-        albumViewModel.getAlbum()
-
-    }
 
     private fun setupUI() {
         setupRecyclerView()
@@ -75,10 +65,9 @@ class AlbumsFragment : Fragment() {
                 Status.SUCCESS -> {
                     hideProgressBar()
                     response.data?.let { albumsResponse ->
-                        Timber.tag("albums").d("Size ::"+albumsResponse.size)
+                        Timber.tag("albums").d("Size ::$albumsResponse.size")
                         for (item in albumsResponse) {
                             albumViewModel.saveAlbumItem(item)
-                            getListAlbumsFromLocal()
                         }
                     }
                 }
@@ -92,6 +81,7 @@ class AlbumsFragment : Fragment() {
 
                 Status.LOADING -> {
                     showProgressBar()
+
                 }
 
             }
@@ -103,8 +93,8 @@ class AlbumsFragment : Fragment() {
     private fun setupRecyclerView() {
         albumAdapter = AlbumAdapter()
         albumList.apply {
-            adapter = albumAdapter
             layoutManager = GridLayoutManager(activity, 2)
+            adapter = albumAdapter
 
         }
     }
@@ -121,6 +111,7 @@ class AlbumsFragment : Fragment() {
                 ?.observe(viewLifecycleOwner) { albums ->
                     if (albums != null) {
                         albumAdapter.differ.submitList(albums)
+                        albumAdapter.notifyDataSetChanged()
                     }
                 }
 
@@ -138,5 +129,6 @@ class AlbumsFragment : Fragment() {
     private fun showProgressBar() {
         loadingProgressBar.visibility = View.VISIBLE
     }
+
 
 }

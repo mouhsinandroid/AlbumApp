@@ -10,9 +10,9 @@ import kotlinx.android.parcel.Parcelize
 )
 @Parcelize
 data class AlbumItem (
-    val albumId: String,
+    val albumId: Int,
     @PrimaryKey
-    val id: String,
+    val id: Int,
     val title: String,
     val url: String,
     val thumbnailUrl: String

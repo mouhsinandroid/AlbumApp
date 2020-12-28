@@ -92,6 +92,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
 
+    //Glide
+    implementation deps.glide.glide
+
+
 
     //Local Unit Test
     testImplementation deps.mockito.core
