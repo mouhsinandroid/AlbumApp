@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Album App</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="error_message">An error occurred while loading data</string>
     <string name="image_album">image album</string>
+    <string name="no_wifi"> No Wifi connection</string>
+    <string name="try_again">Try again</string>
 
 </resources>

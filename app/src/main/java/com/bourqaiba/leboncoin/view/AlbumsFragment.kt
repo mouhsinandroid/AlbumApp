@@ -4,17 +4,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bourqaiba.leboncoin.R
-import com.bourqaiba.leboncoin.data.database.entity.Album
-import com.bourqaiba.leboncoin.databinding.FragmentAlbumsBinding
-import com.bourqaiba.leboncoin.util.Resource
 import com.bourqaiba.leboncoin.util.Status
 import com.bourqaiba.leboncoin.view.adapter.AlbumAdapter
 import com.bourqaiba.leboncoin.viewmodel.vm.AlbumViewModel
@@ -26,24 +19,15 @@ import timber.log.Timber
 class AlbumsFragment : Fragment(R.layout.fragment_albums) {
     private val TAG = AlbumsFragment::class.java.simpleName
 
-    private lateinit var dataBinding: FragmentAlbumsBinding
     private lateinit var albumViewModel: AlbumViewModel
 
     private lateinit var albumAdapter: AlbumAdapter
-
-    private val albumListDataObserver = Observer<Resource<Album>>{ list ->
-        list?.let {
-            albumAdapter.differ.submitList(it.data)
-        }
-
-    }
 
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         albumViewModel = (activity as HomeActivity).viewModel
-        albumViewModel.album.observe(viewLifecycleOwner, albumListDataObserver)
         setupUI()
     }
 
@@ -63,6 +47,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
                     hideProgressBar()
                     response.data?.let { albumsResponse ->
                         Timber.tag("albums").d("Size ::$albumsResponse.size")
+                        albumAdapter.differ.submitList(response.data)
                         for (item in albumsResponse) {
                             albumViewModel.saveAlbumItem(item)
                         }
@@ -71,6 +56,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
                 Status.ERROR -> {
                     hideProgressBar()
                     getListAlbumsFromLocal()
+
                     response.message?.let {
                         Timber.tag(TAG).e(it)
 
@@ -80,7 +66,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
                             Snackbar.LENGTH_LONG
                         )
 
-                        snack.setAction("Try again") {
+                        snack.setAction(getString(R.string.try_again)) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                 startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
                                 snack.dismiss()

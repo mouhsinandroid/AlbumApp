@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.bourqaiba.leboncoin.R
 import com.bourqaiba.leboncoin.data.database.entity.Album
 import com.bourqaiba.leboncoin.data.database.entity.AlbumItem
 import com.bourqaiba.leboncoin.data.repository.AlbumRepository
@@ -33,7 +34,7 @@ class AlbumViewModel(
             val response = repository.getAlbums()
             album.postValue(handleAlbum(response))
 
-        } else album.postValue(Resource.error("No Wifi connection", null))
+        } else album.postValue(Resource.error(noWifiMessage(), null))
     }
 
     private fun handleAlbum(response: Response<Album>): Resource<Album> {
@@ -51,6 +52,10 @@ class AlbumViewModel(
     }
 
     fun getLocalAlbums() = repository.getLocalListAlbums()
+
+    private fun noWifiMessage(): String {
+        return getApplication<Application>().resources.getString(R.string.no_wifi)
+    }
 
 
 
