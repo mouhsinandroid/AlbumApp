@@ -1,9 +1,13 @@
 package com.bourqaiba.leboncoin.view
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,11 +18,12 @@ import com.bourqaiba.leboncoin.util.Resource
 import com.bourqaiba.leboncoin.util.Status
 import com.bourqaiba.leboncoin.view.adapter.AlbumAdapter
 import com.bourqaiba.leboncoin.viewmodel.vm.AlbumViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_albums.*
 import timber.log.Timber
 
 
-class AlbumsFragment : Fragment() {
+class AlbumsFragment : Fragment(R.layout.fragment_albums) {
     private val TAG = AlbumsFragment::class.java.simpleName
 
     private lateinit var dataBinding: FragmentAlbumsBinding
@@ -33,14 +38,6 @@ class AlbumsFragment : Fragment() {
 
     }
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_albums, container, false)
-    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -76,6 +73,21 @@ class AlbumsFragment : Fragment() {
                     getListAlbumsFromLocal()
                     response.message?.let {
                         Timber.tag(TAG).e(it)
+
+                        val snack = Snackbar.make(
+                            refreshLayout,
+                            it,
+                            Snackbar.LENGTH_LONG
+                        )
+
+                        snack.setAction("Try again") {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                startActivity(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY))
+                                snack.dismiss()
+                            }
+                        }
+
+                        snack.show()
                     }
                 }
 
