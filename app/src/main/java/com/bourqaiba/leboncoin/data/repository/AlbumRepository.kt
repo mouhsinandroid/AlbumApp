@@ -1,18 +1,28 @@
 package com.bourqaiba.leboncoin.data.repository
 
-import com.bourqaiba.leboncoin.data.api.RetrofitInstance
+import androidx.lifecycle.LiveData
+import com.bourqaiba.leboncoin.data.api.ApiServices
 import com.bourqaiba.leboncoin.data.database.AlbumDatabase
+import com.bourqaiba.leboncoin.data.database.entity.Album
 import com.bourqaiba.leboncoin.data.database.entity.AlbumItem
+import retrofit2.Response
+import javax.inject.Inject
 
-class AlbumRepository(
-    private val db: AlbumDatabase
-) {
+class AlbumRepository @Inject constructor(
+    private val db: AlbumDatabase,
+    private val apiServices: ApiServices
+) : Repository {
+    override suspend fun insertAlbumItem(albumItem: AlbumItem) {
+        db.getAlbumDao().insertAlbumItem(albumItem)
+    }
 
-    suspend fun getAlbum() = RetrofitInstance.api.getAlbums()
+    override suspend fun getAlbum(): Response<Album> {
+        return apiServices.getAlbum()
+    }
 
-    fun getLocalAlbum() = db.getAlbumDao().getAlbum()
+    override fun getLocalAlbum(): LiveData<List<AlbumItem>>? {
+       return db.getAlbumDao().getAlbum()
+    }
 
-    suspend fun insertAlbumItem(albumItem: AlbumItem) = db.getAlbumDao()
-        .insertAlbumItem(albumItem)
 
 }

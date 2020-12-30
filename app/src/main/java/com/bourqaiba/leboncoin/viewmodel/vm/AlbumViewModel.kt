@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.bourqaiba.leboncoin.R
 import com.bourqaiba.leboncoin.data.database.entity.Album
 import com.bourqaiba.leboncoin.data.database.entity.AlbumItem
-import com.bourqaiba.leboncoin.data.repository.AlbumRepository
+import com.bourqaiba.leboncoin.data.repository.Repository
+import com.bourqaiba.leboncoin.di.AppModule
+import com.bourqaiba.leboncoin.di.DaggerViewModelComponent
 import com.bourqaiba.leboncoin.util.NetworkHelper
 import com.bourqaiba.leboncoin.util.Resource
 import kotlinx.coroutines.launch
@@ -15,14 +17,16 @@ import retrofit2.Response
 
 class AlbumViewModel(
     app: Application,
-    private val repository: AlbumRepository
+    private val repository: Repository
 ): AndroidViewModel(app) {
 
     private val networkHelper = NetworkHelper(app)
 
-    val album : MutableLiveData<Resource<Album>> = MutableLiveData()
+    val album by lazy { MutableLiveData<Resource<Album>>() }
 
     init {
+        DaggerViewModelComponent.builder().appModule(AppModule(getApplication()))
+            .build().injectViewAlbumApi(this)
         getAlbum()
     }
 

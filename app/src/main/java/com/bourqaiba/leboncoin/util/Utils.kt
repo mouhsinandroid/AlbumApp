@@ -1,9 +1,7 @@
 package com.bourqaiba.leboncoin.util
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bourqaiba.leboncoin.R

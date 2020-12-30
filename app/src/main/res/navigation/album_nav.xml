@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/albumDetailFragment"
         android:name="com.bourqaiba.leboncoin.view.detail.AlbumDetailFragment"
-        android:label="Détail"
+        android:label="@string/details"
         tools:layout="@layout/fragment_album_detail">
 
         <action
