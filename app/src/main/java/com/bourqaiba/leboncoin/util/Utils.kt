@@ -34,9 +34,3 @@ fun ImageView.loadImage(uri: String?, progressDrawable: CircularProgressDrawable
 fun loadImage(view: ImageView, url: String) {
     view.loadImage(url, getProgressDrawable(view.context))
 }
-
-@SuppressLint("SetTextI18n")
-@BindingAdapter(value = ["photos"], requireAll = false)
-fun numberOfPhotos(view: TextView, photos: Int) {
-    view.text = "Photos : ($photos photos)"
-}

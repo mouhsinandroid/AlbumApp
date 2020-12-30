@@ -8,15 +8,20 @@
             name="albumItem"
             type="com.bourqaiba.leboncoin.data.database.entity.AlbumItem" />
 
+        <variable
+            name="listener"
+            type="com.bourqaiba.leboncoin.view.home.AlbumItemClickListener" />
+
     </data>
 
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_200sdp"
+        android:layout_height="@dimen/_160sdp"
         app:cardCornerRadius="10dp"
+        android:onClick="@{listener::onClick}"
+        android:tag="@{albumItem.title}"
         app:cardElevation="5dp"
-        android:tag="@{albumItem.albumId}"
         app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,30 +67,7 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_40sdp"
-                android:background="#D5C1C1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/layoutInfoAlbum">
 
-                <TextView
-                    android:id="@+id/numberOfPhotos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    tools:text="TextView"
-                    photos="@{albumItem.id}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.484" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

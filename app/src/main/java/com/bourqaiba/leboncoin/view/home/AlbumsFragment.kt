@@ -1,4 +1,4 @@
-package com.bourqaiba.leboncoin.view
+package com.bourqaiba.leboncoin.view.home
 
 import android.content.Intent
 import android.os.Build
@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bourqaiba.leboncoin.R
 import com.bourqaiba.leboncoin.util.Status
-import com.bourqaiba.leboncoin.view.adapter.AlbumAdapter
 import com.bourqaiba.leboncoin.viewmodel.vm.AlbumViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_albums.*
@@ -24,14 +23,11 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
     private lateinit var albumAdapter: AlbumAdapter
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         albumViewModel = (activity as HomeActivity).viewModel
         setupUI()
     }
-
-
 
     private fun setupUI() {
         setupRecyclerView()
@@ -46,8 +42,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
                 Status.SUCCESS -> {
                     hideProgressBar()
                     response.data?.let { albumsResponse ->
-                        Timber.tag("albums").d("Size ::$albumsResponse.size")
-                        albumAdapter.differ.submitList(response.data)
+                        albumAdapter.differ.submitList(albumsResponse)
                         for (item in albumsResponse) {
                             albumViewModel.saveAlbumItem(item)
                         }
@@ -93,8 +88,9 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
         albumList.apply {
             layoutManager = GridLayoutManager(activity, 2)
             adapter = albumAdapter
-
         }
+
+
     }
 
     private fun refresh() {
@@ -105,14 +101,12 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
     }
 
     private fun getListAlbumsFromLocal() {
-        albumViewModel.getLocalAlbums()
+        albumViewModel.getAlbumFromLocal()
                 ?.observe(viewLifecycleOwner) { albums ->
                     if (albums != null) {
                         albumAdapter.differ.submitList(albums)
-                        albumAdapter.notifyDataSetChanged()
                     }
                 }
-
     }
 
 

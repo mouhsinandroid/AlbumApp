@@ -8,9 +8,9 @@ class AlbumRepository(
     private val db: AlbumDatabase
 ) {
 
-    suspend fun getAlbums() = RetrofitInstance.api.getAlbums()
+    suspend fun getAlbum() = RetrofitInstance.api.getAlbums()
 
-    fun getLocalListAlbums() = db.getAlbumDao().getAlbum()
+    fun getLocalAlbum() = db.getAlbumDao().getAlbum()
 
     suspend fun insertAlbumItem(albumItem: AlbumItem) = db.getAlbumDao()
         .insertAlbumItem(albumItem)

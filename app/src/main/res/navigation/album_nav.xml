@@ -2,24 +2,34 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/album_nav"
     android:label="@string/app_name"
     app:startDestination="@id/albumFragment">
 
 
     <fragment
         android:id="@+id/albumFragment"
-        android:name="com.bourqaiba.leboncoin.view.AlbumsFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_albums" />
+        android:name="com.bourqaiba.leboncoin.view.home.AlbumsFragment"
+        android:label="Album App"
+        tools:layout="@layout/fragment_albums" >
+        <action
+            android:id="@+id/actionDetail"
+            app:destination="@id/albumDetailFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/albumDetailFragment"
-        android:name="com.bourqaiba.leboncoin.view.AlbumDetailFragment"
-        android:label="fragment_album_detail"
-        tools:layout="@layout/fragment_album_detail" />
-    <fragment
-        android:id="@+id/fullScreenPhotoFragment"
-        android:name="com.bourqaiba.leboncoin.view.FullScreenPhotoFragment"
-        android:label="fragment_full_screen_photo"
-        tools:layout="@layout/fragment_full_screen_photo" />
+        android:name="com.bourqaiba.leboncoin.view.detail.AlbumDetailFragment"
+        android:label="Détail"
+        tools:layout="@layout/fragment_album_detail">
+
+        <action
+            android:id="@+id/actionList"
+            app:destination="@id/albumFragment" />
+        <argument
+            android:name="albumItem"
+            app:argType="com.bourqaiba.leboncoin.data.database.entity.AlbumItem" />
+
+
+    </fragment>
+
 </navigation>

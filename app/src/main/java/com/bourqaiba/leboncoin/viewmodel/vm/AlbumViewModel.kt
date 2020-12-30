@@ -31,7 +31,7 @@ class AlbumViewModel(
         if (networkHelper.isNetworkConnected()) {
             album.postValue(Resource.loading(null))
 
-            val response = repository.getAlbums()
+            val response = repository.getAlbum()
             album.postValue(handleAlbum(response))
 
         } else album.postValue(Resource.error(noWifiMessage(), null))
@@ -51,7 +51,7 @@ class AlbumViewModel(
         repository.insertAlbumItem(albumItem)
     }
 
-    fun getLocalAlbums() = repository.getLocalListAlbums()
+    fun getAlbumFromLocal() = repository.getLocalAlbum()
 
     private fun noWifiMessage(): String {
         return getApplication<Application>().resources.getString(R.string.no_wifi)
