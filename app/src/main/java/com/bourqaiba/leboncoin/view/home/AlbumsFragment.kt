@@ -26,6 +26,7 @@ class AlbumsFragment : Fragment(R.layout.fragment_albums) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         albumViewModel = (activity as HomeActivity).viewModel
+        albumViewModel.refreshData()
         setupUI()
     }
 

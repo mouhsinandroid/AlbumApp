@@ -20,13 +20,25 @@ class AlbumViewModel(
     private val repository: Repository
 ): AndroidViewModel(app) {
 
+    constructor(application: Application, repository: Repository, test: Boolean= true): this(application, repository) {
+        injected = true
+    }
+
+    private var injected = false
     private val networkHelper = NetworkHelper(app)
 
     val album by lazy { MutableLiveData<Resource<Album>>() }
 
-    init {
-        DaggerViewModelComponent.builder().appModule(AppModule(getApplication()))
-            .build().injectViewAlbumApi(this)
+
+    private fun inject() {
+        if(!injected) {
+            DaggerViewModelComponent.builder().appModule(AppModule(getApplication()))
+                    .build().injectViewAlbumApi(this)
+        }
+    }
+
+    fun refreshData() {
+        inject()
         getAlbum()
     }
 
